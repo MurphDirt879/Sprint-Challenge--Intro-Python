@@ -1,6 +1,15 @@
+import csv
+
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
-
+class City():
+  def __init__(self, name, lat, lon):
+    self.name = name
+    self.lat = float(lat)
+    self.lon = float(lon)
+  def __str__(self):
+    return f'{self.name}, {self.lat}, {self.lon}'
+cities = []
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -14,14 +23,21 @@
 #
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
-cities = []
+
 
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
-    return cities
+  #Y'all need to teach the next() ... that is just mean to not tell us about it ... 
+  #Also, aparently CSV files start with a 0th index.
+  with open("cities.csv", mode="r") as csvFile: 
+    new_cities = csv.reader(csvFile)
+    next(new_cities)
+    for row in new_cities:
+      city = City(row[0], row[3], row[4])
+      cities.append(city)
+  return cities
 
 cityreader(cities)
 
@@ -63,9 +79,30 @@ for c in cities:
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
+  
 
+  
+
+  citylats = [lat1, lat2]
+  citylats.sort()
+  citylons = [lon1, lon2]
+  citylons.sort()
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
+  
+
+
+  for city in cities: 
+    if citylats[0] <= float(city.lat) <= citylats[1]:
+      if citylons[0] <= float(city.lon) <= citylons[1]:
+        within.append(city)
+
 
   return within
+
+array1 = input("Enter lat1, lon1: ").split(',')
+array2 = input("Enter lat2, lon2: ").split(',')
+
+print(cityreader_stretch(float(array1[0]), float(array1[1]), float(array2[0]), float(array2[1]),cities)) 
+
